@@ -68,8 +68,3 @@ sub override-user-languages(**@languages is copy) {
 sub clear-user-language-override {
   @defaults = ();
 }
-
-override-user-languages(LanguageTag.new('ast-ES'));
-say user-languages;
-clear-user-language-override;
-say user-languages;
