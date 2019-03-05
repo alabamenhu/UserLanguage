@@ -7,7 +7,7 @@ do this, so this module aims to be the one-stop shop to get that information.
 To use, simple ask for the preferred language (if you just want one) or
 preferred languages (more common).
 
-    use 'Intl::UserLanguage';
+    use Intl::UserLanguage;
     user-language;  # ↪︎ [ast] (on my system)
     user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
                     #   (sidenote: no idea why Apple adds -US onto ast…)
@@ -33,3 +33,10 @@ languages, you can override the user’s system languages:
     user-languages; # ↪︎ [jp], [zh]
 
 The override can be cleared at any time with `clear-user-language-override`;
+
+# Support
+
+Support is current available for the following OSes:
+
+  - **macOS**: Full list of languages (as defined in System Preferences → Language & Region → Preferred Languages)
+  - **Linux**: Only the primary language defined in $LANG is returned.  
