@@ -10,13 +10,16 @@ multi sub user-languages (LanguageTag $default = LanguageTag.new('en')) is defau
   return @defaults if @defaults;
 
   given $*DISTRO {
-    when /macosx/ { mac      }
-    when /linux/  { linux    }
-    default       { $default }
+    when /macosx/ { mac       }
+    when /linux/  { linux     }
+    default       { $default, }
   }
 }
 
-
+#(| The subroutine that obtains the user’s preferred languages for macOS.
+    It should work on Mac OS machines going back at least to 2012 (OS X Mountain
+    Lion) and quite possibly a good bit further back than that.
+)
 sub mac {
   # The defaults command on the Mac returns a list formatted as such:
   # (           # opening parenthesis
@@ -30,16 +33,25 @@ sub mac {
   }
 }
 
+#(| The subroutine that obtains the user’s preferred languages for Linux.
+    It should work on virtually all Linux machines and probably most *nix
+    machines as well
+)
 sub linux {
   # This probably works for most *nix machines, but needs testing.
   # There may be better (list like) options, if anyone knows them, please
   # make a pull request or send me information on how to get them.
-  my $code = %*ENV<LANG>;
+  #
+  # On many Linux systems, the LANGUAGE variable is also set, which has a colon
+  # delimited set of languages.
+  my $code = %*ENV<LANGUAGE> // %*ENV<LANG>;
   $code ~~ s/_/-/; # Often uses an underscore instead of a hyphen
-  $code ~~ /<[a..zA..Z0..9-]>+/; # Only one code is provided, and often has
-                                 # a period before an encoding: 'en-US.UTF-8'
-                                 # The encoding is not part of a valid tag.
-  LanguageTag.new: $code;
+  $code ~~ s/'.' <[a..zA..Z0..9_-]>+// # Removes encoding information after the period
+  $code ~~ m:g/<[a..zA..Z0..9-]>+/; # the colon separator should be the only thing
+                                    # left separating the elements
+  gather {
+    take LanguageTag.new($/[$_].Str) for ^$/.elems;
+  }
 }
 
 multi sub user-languages (Str $default = 'en') is export {
