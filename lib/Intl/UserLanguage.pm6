@@ -16,10 +16,9 @@ multi sub user-languages (LanguageTag $default = LanguageTag.new('en')) is defau
   }
 }
 
-#(| The subroutine that obtains the user’s preferred languages for macOS.
-    It should work on Mac OS machines going back at least to 2012 (OS X Mountain
-    Lion) and quite possibly a good bit further back than that.
-)
+#| The subroutine that obtains the user’s preferred languages for macOS.
+#| It should work on Mac OS machines going back at least to 2012 (OS X Mountain
+#| Lion) and quite possibly a good bit further back than that.
 sub mac {
   # The defaults command on the Mac returns a list formatted as such:
   # (           # opening parenthesis
@@ -33,10 +32,9 @@ sub mac {
   }
 }
 
-#(| The subroutine that obtains the user’s preferred languages for Linux.
-    It should work on virtually all Linux machines and probably most *nix
-    machines as well
-)
+#| The subroutine that obtains the user’s preferred languages for Linux.
+#| It should work on virtually all Linux machines and probably most *nix
+#| machines as well
 sub linux {
   # This probably works for most *nix machines, but needs testing.
   # There may be better (list like) options, if anyone knows them, please

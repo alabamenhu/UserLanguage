@@ -39,4 +39,4 @@ The override can be cleared at any time with `clear-user-language-override`;
 Support is current available for the following OSes:
 
   - **macOS**: Full list of languages (as defined in System Preferences → Language & Region → Preferred Languages)
-  - **Linux**: If the `$LANGUAGE` is set, then an ordered list is provided.  Otherwise, it falls back to `$LANG`, which only provides a single language.  
+  - **Linux**: If `$LANGUAGE` is set, then an ordered list is provided.  Otherwise, it falls back to the more universal `$LANG`, which only provides a single language.  
