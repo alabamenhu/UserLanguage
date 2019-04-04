@@ -44,9 +44,9 @@ sub linux {
   # delimited set of languages.
   my $code = %*ENV<LANGUAGE> // %*ENV<LANG>;
   $code ~~ s/_/-/; # Often uses an underscore instead of a hyphen
-  $code ~~ s/'.' <[a..zA..Z0..9_-]>+// # Removes encoding information after the period
-  $code ~~ m:g/<[a..zA..Z0..9-]>+/; # the colon separator should be the only thing
-                                    # left separating the elements
+  $code ~~ s/'.' <[a..zA..Z0..9_-]>+//; # Removes encoding information after the period
+  $code ~~ m:g/<[a..zA..Z0..9-]>+/;     # the colon separator should be the only thing
+                                        # left separating the elements
   gather {
     take LanguageTag.new($/[$_].Str) for ^$/.elems;
   }
