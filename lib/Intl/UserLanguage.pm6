@@ -64,7 +64,7 @@ multi sub user-language (LanguageTag $default = LanguageTag.new('en')) is defaul
 
 # Slurpies can't be typed, but that's fine.
 # If it's a LanguageTag, it's taken as is, otherwise it's converted into one.
-sub override-user-languages(**@languages is copy) {
+sub override-user-languages(**@languages is copy) is export {
   @defaults = do gather {
     for @languages -> $language {
       if $language ~~ LanguageTag {
@@ -75,6 +75,6 @@ sub override-user-languages(**@languages is copy) {
     }
   }
 }
-sub clear-user-language-override {
+sub clear-user-language-override is export {
   @defaults = ();
 }

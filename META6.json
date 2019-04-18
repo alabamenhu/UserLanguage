@@ -1,7 +1,7 @@
 {
   "perl"          : "6.*",
   "name"          : "Intl::UserLanguage",
-  "version"       : "0.2.2",
+  "version"       : "0.2.3",
   "api"           : 1,
   "description"   : "A simple module for obtaining the user’s preferred language(s)",
   "authors"       : ["Matthew ‘Matéu’ Stephen STUCKWISCH <mateu@softastur.com>"],
