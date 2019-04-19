@@ -4,15 +4,16 @@ use Intl::BCP47;
 my @defaults = ();
 
 proto sub user-langauges(|c) { * }
-proto sub user-langauge(|c)  { * }
+proto sub user-langauge( |c) { * }
 
 multi sub user-languages (LanguageTag $default = LanguageTag.new('en')) is default is export {
   return @defaults if @defaults;
 
   given $*DISTRO {
-    when /macosx/ { mac       }
-    when /linux/  { linux     }
-    default       { $default, }
+    when /windows/ { try { CATCH { $default } windows   }
+    when /macosx/  {                          mac       }
+    when /linux/   {                          linux     }
+    default        {                          $default, }
   }
 }
 
@@ -50,6 +51,25 @@ sub linux {
   gather {
     take LanguageTag.new($/[$_].Str) for ^$/.elems;
   }
+}
+
+#| The subroutine that obtains the user's preferred languages for Windows.
+#| It should obtain the active language on most recent (NT and higher) versions.
+#| If not, please submit a bug request with your version of Windows and a way to
+#| detect the language.
+sub windows {
+  # On most (?) Windows, we can get the LocaleName by reading the registry.
+  # The output of the command run below looks like
+  #
+  # HKEY_CURRENT_USER\Control Panel\International
+  #    Locale    REG_SZ    00000409
+  #    LocaleName    REG_SZ    en-US
+  #    […]
+  # According to Window's docs, it is possible for Windows to be run "regionless"
+  # but I'm not sure how that would work.  The region code is "-" in that
+  # theoretical case.
+  my $text = (run 'reg', 'query', 'HKCU\Control Panel\International', :out).out.slurp;
+  $text.lines.first(*.contains: 'LocaleName').words[2];
 }
 
 multi sub user-languages (Str $default = 'en') is export {
