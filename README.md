@@ -7,10 +7,12 @@ do this, so this module aims to be the one-stop shop to get that information.
 To use, simple ask for the preferred language (if you just want one) or
 preferred languages (more common).
 
-    use Intl::UserLanguage;
-    user-language;  # ↪︎ [ast] (on my system)
-    user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
-                    #   (sidenote: no idea why Apple adds -US onto ast…)
+```perl6
+use Intl::UserLanguage;
+user-language;  # ↪︎ [ast-US] (on my system)
+user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
+                #   (sidenote: no idea why Apple adds -US onto ast…)
+```
 
 In truth, the preferred language is just a wrapper for calling `.head` on the
 list.  I'd recommend against using `user-language`, as most times when you
@@ -27,10 +29,12 @@ module.  If you do not provide a default, and no language can be found, the
 As a final option, particularly if you want to test your code with other
 languages, you can override the user’s system languages:
 
-    user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
-                    #   (sidenote: no idea why Apple adds -US onto ast…)
-    override-user-languages('jp','zh');
-    user-languages; # ↪︎ [jp], [zh]
+```perl6
+user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
+                #   (sidenote: no idea why Apple adds -US onto ast…)
+override-user-languages('jp','zh');
+user-languages; # ↪︎ [jp], [zh]
+```
 
 The override can be cleared at any time with `clear-user-language-override`;
 
