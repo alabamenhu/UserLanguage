@@ -12,6 +12,7 @@ use Intl::UserLanguage;
 user-language;  # ↪︎ [ast-US] (on my system)
 user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
                 #   (sidenote: no idea why Apple adds -US onto ast…)
+                #   (sidenote: Microsoft makes it ast-Latn… weird.)
 ```
 
 In truth, the preferred language is just a wrapper for calling `.head` on the
@@ -31,7 +32,6 @@ languages, you can override the user’s system languages:
 
 ```perl6
 user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
-                #   (sidenote: no idea why Apple adds -US onto ast…)
 override-user-languages('jp','zh');
 user-languages; # ↪︎ [jp], [zh]
 ```
@@ -44,5 +44,6 @@ Support is current available for the following OSes:
 
   - **macOS**: Full list of languages (as defined in System Preferences → Language & Region → Preferred Languages)
   - **Linux**: If `$LANGUAGE` is set, then an ordered list is provided.  Otherwise, it falls back to the more universal `$LANG`, which only provides a single language.  
-  - **Windows**: Uses the registry value `LocaleName` found in the `HKCU\Control Panel\International` (*experimental*: I don't have access to a Windows machine
-  with Perl 6 on it to test with)
+  - **Windows**: If the registry value `Languages` is set in `HKCU\Control Panel\International\User Profile`, uses the ordered list found there.  Otherwise, it falls back to the registry value `LocaleName` found in at `HKCU\Control Panel\International`.
+
+Support is not available for *nix machines right now, but only because I am not sure what the $*DISTRO value is for those systems.  I imagine detection will be similar if not identical to Linux.

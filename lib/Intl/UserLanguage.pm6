@@ -10,10 +10,10 @@ multi sub user-languages (LanguageTag $default = LanguageTag.new('en')) is defau
   return @defaults if @defaults;
 
   given $*DISTRO {
-    when /windows/ { try { CATCH { $default } windows   }
-    when /macosx/  {                          mac       }
-    when /linux/   {                          linux     }
-    default        {                          $default, }
+    when /windows/ { try { CATCH { $default }; windows  }}
+    when /macosx/  {                           mac       }
+    when /linux/   {                           linux     }
+    default        {                           $default, }
   }
 }
 
@@ -68,7 +68,17 @@ sub windows {
   # According to Window's docs, it is possible for Windows to be run "regionless"
   # but I'm not sure how that would work.  The region code is "-" in that
   # theoretical case.
-  my $text = (run 'reg', 'query', 'HKCU\Control Panel\International', :out).out.slurp;
+  #
+  # For later versions of Windows, it is possible to get an ordered list of languages.
+  # Like with Linux, the first attempt is to get an ordered list. If that fails, then
+  # the more fool-proof LocaleName will be used.
+
+  my $text = (run 'reg', 'query', 'HKCU\Control Panel\International\User Profile', :out).out.slurp;
+  if my $entry = ($text.lines.first(*.contains: "Languages")) {
+    return gather { take LanguageTag.new($_) for $entry.words[2].split('\0') }
+  }
+
+  $text = (run 'reg', 'query', 'HKCU\Control Panel\International', :out).out.slurp;
   $text.lines.first(*.contains: 'LocaleName').words[2];
 }
 
