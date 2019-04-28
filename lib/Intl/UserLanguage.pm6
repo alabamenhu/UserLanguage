@@ -10,7 +10,7 @@ multi sub user-languages (LanguageTag $default = LanguageTag.new('en')) is defau
   return @defaults if @defaults;
 
   given $*DISTRO {
-    when /windows/ { try { CATCH { $default }; windows  }}
+    when .is-win   { try { CATCH { $default }; windows  }}
     when /macosx/  {                           mac       }
     when /linux/   {                           linux     }
     default        {                           $default, }
