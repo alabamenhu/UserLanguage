@@ -1,8 +1,8 @@
 # Intl::UserLanguage
 
-This is a incredibly simple module designed to do one thing and one thing only:
-obtain the current user’s preferred language(s).  There is no universal way to
-do this, so this module aims to be the one-stop shop to get that information.
+This is a incredibly simple module for Raku designed to do one thing and one thing
+only: obtain the current user’s preferred language(s).  There is no universal way
+to do this, so this module aims to be the one-stop shop to get that information.
 
 To use, simple ask for the preferred language (if you just want one) or
 preferred languages (more common).
@@ -46,4 +46,7 @@ Support is current available for the following OSes:
   - **Linux**: If `$LANGUAGE` is set, then an ordered list is provided.  Otherwise, it falls back to the more universal `$LANG`, which only provides a single language.  
   - **Windows**: If the registry value `Languages` is set in `HKCU\Control Panel\International\User Profile`, uses the ordered list found there.  Otherwise, it falls back to the registry value `LocaleName` found in at `HKCU\Control Panel\International`.
 
-Support is not available for *nix machines right now, but only because I am not sure what the $*DISTRO value is for those systems.  I imagine detection will be similar if not identical to Linux.
+Support is not available for *nix machines right now, but only because I am not
+sure what the `$*DISTRO` value is for those systems.  I imagine detection will be
+similar if not identical to Linux.  Please contact me with your `$*DISTRO` value
+and how to detect your system language(s) and I'll gladly add it.

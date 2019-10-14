@@ -10,3 +10,5 @@ Thumbs.db
 # precompiled files
 .precomp
 lib/.precomp
+.idea
+
