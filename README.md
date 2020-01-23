@@ -1,4 +1,4 @@
-# Intl::UserLanguage
+![Intl::UserLanguage for Raku](docs/logo.png)
 
 This is a incredibly simple module for Raku designed to do one thing and one thing
 only: obtain the current user’s preferred language(s).  There is no universal way
@@ -7,7 +7,7 @@ to do this, so this module aims to be the one-stop shop to get that information.
 To use, simple ask for the preferred language (if you just want one) or
 preferred languages (more common).
 
-```perl6
+```raku
 use Intl::UserLanguage;
 user-language;  # ↪︎ [ast-US] (on my system)
 user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
@@ -25,12 +25,13 @@ string in BCP47 format or a LanguageTag.  This is useful in case for some reason
 the user’s language(s) cannot be determined, for example, if the user is
 running an operating system that has not had its settings cataloged in this
 module.  If you do not provide a default, and no language can be found, the
-*default* default language is **en** (English).
+*default* default language is **en** (English).  Be aware that the default code
+is global and cannot (currently) be lexically scoped.
 
 As a final option, particularly if you want to test your code with other
 languages, you can override the user’s system languages:
 
-```perl6
+```raku
 user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
 override-user-languages('jp','zh');
 user-languages; # ↪︎ [jp], [zh]
