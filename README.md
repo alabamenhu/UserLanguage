@@ -25,19 +25,21 @@ string in BCP47 format or a LanguageTag.  This is useful in case for some reason
 the user’s language(s) cannot be determined, for example, if the user is
 running an operating system that has not had its settings cataloged in this
 module.  If you do not provide a default, and no language can be found, the
-*default* default language is **en** (English).  Be aware that the default code
-is global and cannot (currently) be lexically scoped.
+*default* default language is **en** (English).
 
 As a final option, particularly if you want to test your code with other
 languages, you can override the user’s system languages:
 
 ```raku
+use Intl::UserLanguage :override;  # imports override functions
 user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
 override-user-languages('jp','zh');
 user-languages; # ↪︎ [jp], [zh]
 ```
 
-The override can be cleared at any time with `clear-user-language-override`;
+The override can be cleared at any time with `clear-user-language-override`.
+Note that the override is *global*, and there is no current way to lexically
+scope it;
 
 # Support
 
@@ -51,3 +53,9 @@ Support is not available for *nix machines right now, but only because I am not
 sure what the `$*DISTRO` value is for those systems.  I imagine detection will be
 similar if not identical to Linux.  Please contact me with your `$*DISTRO` value
 and how to detect your system language(s) and I'll gladly add it.
+
+# Licenses and Legal Stuff
+
+This module is licensed under the Artistic License 2.0 which is included
+with the source.  Camelia (the butterfly) is a trademark belonging to
+Larry Walls and used in accordance with his terms.
