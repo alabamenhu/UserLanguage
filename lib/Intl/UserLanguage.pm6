@@ -3,8 +3,8 @@ use Intl::LanguageTag;
 
 my @defaults = ();
 
-proto sub user-langauges(|c) { * }
-proto sub user-langauge( |c) { * }
+proto sub user-languages(|c) { * }
+proto sub user-language( |c) { * }
 
 #| Obtains the user’s preferred language(s) in LanguageTag format.
 multi sub user-languages (LanguageTag $default = LanguageTag.new('en')) is default is export {
@@ -44,9 +44,9 @@ sub linux {
 
   my $code = %*ENV<LANGUAGE> // %*ENV<LANG>;
   $code ~~ s/_/-/; # Often uses an underscore instead of a hyphen
-  $code ~~ s/'.' <[a..zA..Z0..9_-]>+//; # Removes encoding information after the period
-  $code ~~ m:g/<[a..zA..Z0..9-]>+/;     # the colon separator should be the only thing
-                                        # left separating the elements
+  $code ~~ s:g/'.' <[a..zA..Z0..9_-]>+//; # Removes encoding information after the period
+  $code ~~ m:g/    <[a..zA..Z0..9-]> +/;  # the colon separator should be the only thing
+                                          # left separating the elements
   gather {
     take LanguageTag.new($/[$_].Str) for ^$/.elems;
   }
@@ -55,7 +55,7 @@ sub linux {
 #| Obtains the default language(s) assuming a Windows system.
 sub windows {
   # It should obtain the active language on most recent (NT and higher) versions.
-  # If not, please submit a bug request with your version of Windows and a way to
+  # If not, please submit Github issue with your version of Windows and a way to
   # detect the language.
   # On most (?) Windows, we can get the LocaleName by reading the registry.
   # The output of the command run below looks like
@@ -84,10 +84,10 @@ sub windows {
 
 
 multi sub user-languages (Str $default = 'en') is export {
-  samewith LanguageTag($default)
+  samewith LanguageTag.new($default)
 }
 multi sub user-language (Str $default = 'en') is export {
-  samewith LanguageTag($default)
+  samewith LanguageTag.new($default)
 }
 multi sub user-language (LanguageTag $default = LanguageTag.new('en')) is default is export {
   user-languages($default).head;
@@ -101,7 +101,7 @@ sub override-user-languages(**@languages is copy) is export(:override) {
       if $language ~~ LanguageTag {
         take $language
       } else {
-        take LanguageTag.new($language)
+        take LanguageTag.new: $language
       }
     }
   }
