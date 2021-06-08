@@ -1,111 +1,109 @@
-unit module Intl::UserLanguage:ver<0.2.0>:auth<Matthew Stephen Stuckwisch (mateu@softastur.org)>;
-use Intl::LanguageTag;
+=begin pod
+    Because UserLanguage is designed to be a core Intl module, it is allowed only *one*
+    dependency: C<Intl::LanguageTag>. This means that many operations that would be very
+    simple elsewhere by, e.g. consulting Intl::CLDR must be 100% self-contained here.
 
-my @defaults = ();
+    Due to the added complexity of handling potentially complicated lookups, it is
+    recommended that highly specialized look ups (e.g. major distributions of operating
+    systems) be farmed out into specialized modules C<Intl::UserLanguage::OS-Name>.
+    At the present moment, these are called individually by subs, but as that necessitates
+    some overhead for each one, a different solution will be devised later that will
+    load on demand.  (This cannot be done at compile-time, as theoretically precompiled
+    things should be transferable from one system to another).
 
-proto sub user-languages(|c) { * }
-proto sub user-language( |c) { * }
+=end pod
 
-#| Obtains the user’s preferred language(s) in LanguageTag format.
-multi sub user-languages (LanguageTag $default = LanguageTag.new('en')) is default is export {
-  return @defaults if @defaults;
-
-  given $*DISTRO {
-    when .is-win   { try { CATCH { $default }; windows  }}
-    when /macosx/  {                           mac       }
-    when /linux/   {                           linux     }
-    default        {                           $default, }
-  }
+my package UserLanguage {
+    my @languages;        #= The user's preferred languages
+    my @languages-backup; #= The 'backup' when overriding, effectively a temp var
+    my @fallback;         #= The fallback, in case languages could not be determined (rare)
 }
 
-#| Obtains the default language(s) assuming a macOS system.
-sub mac {
-  # This should work on machines going back at least to 2012 (OS X Mountain
-  # Lion) and quite possibly a good bit further back than that. The defaults
-  # command on the Mac returns a list formatted as such:
-  # (           # opening parenthesis
-  #    "foo",   #   language tag in quotes
-  #    "bar"    #   with no final comma
-  # )           # closing parenthesis
+# Because we allow the positional arguments,
+# the use of the EXPORT sub is obligatory.
 
-  my $text = (run 'defaults', 'read', '-g', 'AppleLanguages', :out).out.slurp;
-  $text ~~ m:g/<[a..zA..Z0..9-]>+/;
-  gather {
-    take LanguageTag.new($/[$_].Str) for ^$/.elems;
-  }
-}
+#| Exports the UserLanguage routines into the current scope
+sub EXPORT (
+        +@fallback-languages #= The language tag(s) to use as the fallback if language detection fails
+) {
+  use Intl::LanguageTag:ver<0.11>;
+  use Intl::UserLanguage::Linux;
+  use Intl::UserLanguage::Mac;
+  use Intl::UserLanguage::Windows;
 
-#| Obtains the default language(s) assuming a Linux system.
-sub linux {
-  # It should work on virtually all Linux machines and probably most *nix
-  # machines as well, but should be tested before enabling by using the LANG
-  # environmental variable.  On many Linux systems, the LANGUAGE variable is
-  # also set, which has a colon delimited set of languages in preferred order.
+  # There are only three variables that need to be persistent
+  my @languages;        #= The user's preferred languages
+  my @languages-backup; #= The 'backup' when overriding, effectively a temp var
+  my @fallback;         #= The fallback, in case languages could not be determined (rare)
 
-  my $code = %*ENV<LANGUAGE> // %*ENV<LANG>;
-  $code ~~ s/_/-/; # Often uses an underscore instead of a hyphen
-  $code ~~ s:g/'.' <[a..zA..Z0..9_-]>+//; # Removes encoding information after the period
-  $code ~~ m:g/    <[a..zA..Z0..9-]> +/;  # the colon separator should be the only thing
-                                          # left separating the elements
-  gather {
-    take LanguageTag.new($/[$_].Str) for ^$/.elems;
-  }
-}
-
-#| Obtains the default language(s) assuming a Windows system.
-sub windows {
-  # It should obtain the active language on most recent (NT and higher) versions.
-  # If not, please submit Github issue with your version of Windows and a way to
-  # detect the language.
-  # On most (?) Windows, we can get the LocaleName by reading the registry.
-  # The output of the command run below looks like
-  #
-  # HKEY_CURRENT_USER\Control Panel\International
-  #    Locale    REG_SZ    00000409
-  #    LocaleName    REG_SZ    en-US
-  #    […]
-  # According to Window's docs, it is possible for Windows to be run "regionless"
-  # but I'm not sure how that would work.  The region code is "-" in that
-  # theoretical case.
-  #
-  # For later versions of Windows, it is possible to get an ordered list of languages.
-  # As with the Linux code, the first attempt is to get an ordered list. If that fails,
-  # then the more fool-proof LocaleName will be used.
-
-  my $text = (run 'reg', 'query', 'HKCU\Control Panel\International\User Profile', :out).out.slurp;
-  if my $entry = ($text.lines.first(*.contains: "Languages")) {
-    return gather { take LanguageTag.new($_) for $entry.words[2].split('\0') }
+  # The fallback can either be specified in the 'use' statement, or defaults
+  # to English (because linguistic hegemony and all -- but don't think I haven't
+  # been tempted to set it to something like Guarani just for funsies).
+  if @fallback-languages {
+    @fallback = @fallback-languages.&to-lang-tag;
+  } else {
+    @fallback := LanguageTag.new('en').list
   }
 
-  $text = (run 'reg', 'query', 'HKCU\Control Panel\International', :out).out.slurp;
-  $text.lines.first(*.contains: 'LocaleName').words[2];
+
+  # The primary function for us to use
+  proto sub user-languages(|c) { * }
+  proto sub user-language( |c) { * }
+
+  #| Obtains the user’s preferred language(s) in LanguageTag format.
+  multi sub user-languages (+@default) is export {
+    .return if @languages;
+
+    @languages =
+        do given $*DISTRO  {
+            when .is-win   {        windows        }
+            when /macosx/  {          mac          }
+            when /linux/   {         linux         }
+            CATCH          {        default {}     } # By doing nothing, we fall through to…
+        } //               ( @default.&to-lang-tag   # Return the fallback,
+                             || @fallback          ) #   or defined at 'use'
+  }
+
+  #| Obtains the user’s preferred language in LanguageTag format.
+  multi sub user-language (|default) is export {
+    user-languages(default).head;
+  }
+
+
+  # These should technically be methods but then they can't be multi.
+  # These are only really needed until a Str->LanguageTag coercion method
+  # is possible in core (e.g. FROM() ).
+  multi sub to-lang-tag(LanguageTag \tag ) {                  tag }
+  multi sub to-lang-tag(Str()       \tag ) { LanguageTag.new: tag }
+  multi sub to-lang-tag(Iterable    \tags) is default { gather {take .&to-lang-tag for tags} }
+
+
+  Map.new:
+         # '&clear-user-language-override' => &clear-user-language-override,
+         # '&override-user-languages'      => &override-user-languages,
+          '&user-language'                => &user-language,
+          '&user-languages'               => &user-languages,
 }
 
 
 
-multi sub user-languages (Str $default = 'en') is export {
-  samewith LanguageTag.new($default)
-}
-multi sub user-language (Str $default = 'en') is export {
-  samewith LanguageTag.new($default)
-}
-multi sub user-language (LanguageTag $default = LanguageTag.new('en')) is default is export {
-  user-languages($default).head;
-}
 
-# Slurpies can't be typed, but that's fine.
-# If it's a LanguageTag, it's taken as is, otherwise it's converted into one.
-sub override-user-languages(**@languages is copy) is export(:override) {
-  @defaults = do gather {
-    for @languages -> $language {
-      if $language ~~ LanguageTag {
-        take $language
-      } else {
-        take LanguageTag.new: $language
-      }
+my package EXPORT::override {
+
+    sub override-user-languages(+@languages is copy) is export(:override) {
+        use Intl::LanguageTag;
+        @UserLanguage::languages-backup = @languages;
+        @languages := lazy gather {
+            for @languages -> $language {
+                ($language ~~ LanguageTag)
+                        ?? (take $language)
+                        !! (take LanguageTag.new: $language)
+            }
+        }
     }
-  }
+
+    sub clear-user-language-override is export(:override) {
+        @UserLanguage::languages = @UserLanguage::languages-backup;
+    }
 }
-sub clear-user-language-override is export(:override) {
-  @defaults = ();
-}
+
