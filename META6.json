@@ -8,14 +8,14 @@
   ],
   "auth": "github:alabamenhu",
   "depends": [
-    "Intl::LanguageTag"
+    "Intl::LanguageTag:ver<0.11>"
   ],
   "build-depends": [],
   "test-depends": [],
   "provides": {
     "Intl::UserLanguage": "lib/Intl/UserLanguage.pm6"
   },
-  "resources": [],
+  "resources": ["resources/native-lib/macos.dylib"],
   "license": "Artistic-2.0",
   "tags": [
     "Language",
