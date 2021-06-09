@@ -46,7 +46,7 @@ scope it;
 Support is current available for the following OSes:
 
   - **macOS**  
-    Full list of languages (as defined in *System Preferences → Language & Region → Preferred Languages*).  Paralinguistic preferences (e.g. calendar type) are not set on a per-language basis, so carry to all languages.
+    Full list of languages (as defined in *System Preferences → Language & Region → Preferred Languages*).  Paralinguistic preferences (e.g. calendar type) are not set on a per-language basis, so they carry to all languages.
   - **Linux**: If `$LANGUAGE` is set, then an ordered list is provided.  Otherwise, it falls back to the more universal `$LANG`, which only provides a single language.  
   - **Windows**: If the registry value `Languages` is set in `HKCU\Control Panel\International\User Profile`, uses the ordered list found there.  Otherwise, it falls back to the registry value `LocaleName` found in at `HKCU\Control Panel\International`.
 
@@ -59,10 +59,14 @@ and how to detect your system language(s) and I'll gladly add it.
 
 If your program only needs the language code to pass it through to something that only employs strings (e.g. to directly create a , it may
 be useful to `use` the module in `:light` mode.
-Instead of receiving a `LanguageTag` object, you will get a `Str` that can be passed into 
+Instead of receiving a `LanguageTag` object, you will get a `Str` that can be passed into other modules.
 
 # Version History
 
+- 0.4 
+  - Moved individual OS versions into separate submodules.  This will be more maintainable long term
+  - Completely rewritten Mac code to support some extended attributes.
+    - Sets up a model for using NativeCall when possible, and falling back to a slower method if not.
 - 0.3
   - Cache language(s) on first call to `user-language[s]`  
     This should provide a substantial speed up for modules like `Intl::*` that call this frequently as a fall back.
