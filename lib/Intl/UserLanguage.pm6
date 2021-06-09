@@ -26,7 +26,7 @@ my package UserLanguage {
 sub EXPORT (
         +@fallback-languages #= The language tag(s) to use as the fallback if language detection fails
 ) {
-  use Intl::LanguageTag:ver<0.11>;
+  use Intl::LanguageTag:ver<0.11+>;
   use Intl::UserLanguage::Linux;
   use Intl::UserLanguage::Mac;
   use Intl::UserLanguage::Windows;

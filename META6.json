@@ -8,7 +8,7 @@
   ],
   "auth": "github:alabamenhu",
   "depends": [
-    "Intl::LanguageTag:ver<0.11>"
+    "Intl::LanguageTag:ver<0.11+>"
   ],
   "build-depends": [],
   "test-depends": [],
