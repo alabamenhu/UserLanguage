@@ -93,7 +93,7 @@ const char* mac_native() {
 
             if      ([measure isEqualToString:@"U.S."  ]) { [extTag appendString: @"ussystem"]; }
             else if ([measure isEqualToString:@"U.K."  ]) { [extTag appendString: @"uksystem"]; }
-            else if ([measure isEqualToString:@"metric"]) { [extTag appendString: @"metric " ]; }
+            else if ([measure isEqualToString:@"metric"]) { [extTag appendString: @"metric"  ]; }
             else                                          { [extTag appendString:   measure  ]; }
         }
     }
