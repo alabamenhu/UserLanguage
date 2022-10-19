@@ -63,8 +63,9 @@ Instead of receiving a `LanguageTag` object, you will get a `Str` that can be pa
 
 # Version History
 
-- 0.4 
+- 0.4.0 
   - Moved individual OS versions into separate submodules.  This will be more maintainable long term
+  - Adjusted OS detection for macOS (Rakudo no longer reports it as `macosx` but rather `macos`)
   - Completely rewritten Mac code to support some extended attributes.
     - Sets up a model for using NativeCall when possible, and falling back to a slower method if not.
 - 0.3
