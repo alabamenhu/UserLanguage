@@ -11,7 +11,6 @@
 =end pod
 
 unit module Linux;
-    use Intl::LanguageTag;
 
 #| Obtains the default language(s) assuming a Linux system.
 sub linux is export {
@@ -22,7 +21,5 @@ sub linux is export {
     $code ~~ s:g/'.' <[a..zA..Z0..9_-]>+//; # Removes encoding information after the period
     $code ~~ m:g/    <[a..zA..Z0..9-]> +/;  # The colon separator should be the only thing
                                             # left separating the elements
-    gather {
-        take LanguageTag.new($/[$_].Str) for ^$/.elems;
-    }
+    return $/[$_].Str for ^$/.elems;
 }
