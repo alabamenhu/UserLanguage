@@ -1,14 +1,14 @@
 {
   "name": "Intl::UserLanguage",
   "description": "A simple module for obtaining the user’s preferred language(s)",
-  "version": "0.4",
+  "version": "0.4.0",
   "perl": "6.*",
   "authors": [
     "Matthew ‘Matéu’ Stephen STUCKWISCH <mateu@softastur.com>"
   ],
-  "auth": "github:alabamenhu",
+  "auth": "zef:guifa",
   "depends": [
-    "Intl::LanguageTag:ver<0.11+>"
+    "Intl::LanguageTag:auth:<zef:guifa>:ver<0.12.1+>"
   ],
   "build-depends": [],
   "test-depends": [],
@@ -19,7 +19,7 @@
     "Intl::UserLanguage::Windows": "lib/Intl/UserLanguage/Windows.pm6"
   },
   "resources": [
-    "resources/native-lib/macos.dylib"
+    "macos/userlanguage.dylib"
   ],
   "license": "Artistic-2.0",
   "tags": [
