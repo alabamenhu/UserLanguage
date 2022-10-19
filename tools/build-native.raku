@@ -1,6 +1,7 @@
 #!/usr/bin/env perl6
 =begin pod
-    This script will likely need to be run on a separate machine for each person
+    This script may need to be run on a separate machine for each person, I'm not sure
+    how well linking of these frameworks works between different ystems
 =end pod
 sub MAIN(:$target) {
     die "You should specify a target (e.g. 'macos')." unless $target;
@@ -12,8 +13,8 @@ sub MAIN(:$target) {
 
 
 sub build-mac {
-    my \input  = $*PROGRAM.sibling('native-src').add('macos.m'    );
-    my \output = $*PROGRAM.sibling('native-lib').add('macos.dylib');
+    my \input  = $*PROGRAM.sibling(      'native-src').add('macos.m'    );
+    my \output = $*PROGRAM.parent.sibling('resources').add('macos/userlanguage.dylib');
 
     my $result = run
             'clang', #'-ObjC',
