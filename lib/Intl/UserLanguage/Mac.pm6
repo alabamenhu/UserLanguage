@@ -1,47 +1,41 @@
 =begin pod
-    The Mac stores language information in several locations in the global
-    preferences domain.  Thus, we read them all using the shell command
-    'defaults read -g X' where X is the property that we want.  Parsing is
-    regrettably not consistent, but will be documented at each stage.
+The Mac stores language information in several locations in the global
+preferences domain.  Thus, we read them all using the shell command
+'defaults read -g X' where X is the property that we want.  Parsing is
+regrettably not consistent, but will be documented at each stage.
 
-    Per one of Apple's support posts (which I regrettably did not save a
-    link to), use of these defaults calls is I<not> considered a public
-    API, and is subject to change.  Nonetheless, they appear to be
-    generally stable and should work going back to at least 2012 (OS X
-    Mountain Lion), and probably a good bit further back than that.
-    If we need to version guard any piece, I've specifically designed
-    this file to make that straightforward.
+Per one of Apple's support posts (which I regrettably did not save a
+link to), use of these defaults calls is I<not> considered a public
+API, and is subject to change.  Nonetheless, they appear to be
+generally stable and should work going back to at least 2012 (OS X
+Mountain Lion), and probably a good bit further back than that.
+If we need to version guard any piece, I've specifically designed
+this file to make that straightforward.
 
-    The stable API requires a call to Apple's Foundation frameworks.
-    This is done via NativeCall.  Because of the way that GateKeeper works,
-    I'm not entirely convinced that this is something that can be
-    guaranteed to function long term without requiring users to build
-    on their system (which requires clang or gcc to be installed).
-    For this reason, I have also maintained similar code in Raku using
-    the aforementioned non-public/non-stable (but very in the open,
-    very unchanged) API provided through defaults.
+The stable API requires a call to Apple's Foundation frameworks.
+This is done via NativeCall.  Because of the way that GateKeeper works,
+I'm not entirely convinced that this is something that can be
+guaranteed to function long term without requiring users to build
+on their system (which requires clang or gcc to be installed).
+For this reason, I have also maintained similar code in Raku using
+the aforementioned non-public/non-stable (but very in the open,
+very unchanged) API provided through defaults.
 =end pod
 
 unit module Mac;
 
-use Intl::LanguageTag:ver<0.11+>;
-
 use NativeCall;
-sub mac_native()
+sub mac_native
         returns Str is encoded('utf8')
-        is native(%?RESOURCES<native-lib/macos.dylib>) {*}
+        is native(%?RESOURCES<macos/userlanguage.dylib>) {*}
 
 #| Obtains the default language(s) assuming a macOS system.
 sub mac is export {
-    return mac_non-native;
-
     my $native = mac_native();
 
     # Guard to ensure we got something back
     if $native {
-        return do lazy gather for $native.split(';') -> $language {
-            take LanguageTag.new($language);
-        }
+        return $native.split(';');
     }
 
     # Not actually sure what a GateKeeper error would look like,
@@ -85,12 +79,7 @@ sub mac_non-native {
         #$extensions ~= '-ms-' ~ $measure   if $measure;
     }
 
-    my @base-languages := get-basetags;
-
-    return do lazy gather for @base-languages -> $language {
-        take LanguageTag.new: $language ~ $extensions;
-    }
-
+    return get-basetags.map(* ~ $extensions);
 }
 
 sub get-basetags {
@@ -100,7 +89,7 @@ sub get-basetags {
     #    "foo",   #   language tag in quotes
     #    "bar"    #   with no final comma
     # )           # closing parenthesis
-    # They will have language, region, and (rarely) script
+    # They will have language, region, and (rarely) script.
     my $text = (run 'defaults', 'read', '-g', 'AppleLanguages', :out, :err).out.slurp;
 
     return .list>>.Str
