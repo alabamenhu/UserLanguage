@@ -7,7 +7,8 @@
     Linux tends to use a POSIX language tag.  Guidelines for converting these
     can be found in Intl::LanguageTag::POSIX, but should be self contained
     here to avoid providing excess information (like encoding) that a
-    LanguageTag::POSIX.new(…).bcp-47 conversion would include.
+    LanguageTag::POSIX.new(…).bcp-47 conversion would include.  This work
+    will be done for a future version.
 =end pod
 
 unit module Linux;

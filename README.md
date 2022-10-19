@@ -67,7 +67,7 @@ Instead of receiving a `LanguageTag` object, you will get a `Str` that can be pa
   - Moved individual OS versions into separate submodules.  This will be more maintainable long term
   - Adjusted OS detection for macOS (Rakudo no longer reports it as `macosx` but rather `macos`)
   - Completely rewritten Mac code to support some extended attributes.
-    - Sets up a model for using NativeCall when possible, and falling back to a slower method if not.
+    - Sets up a model for using NativeCall when possible, and falling back to a slower method if not (Windows will eventually adopt a similar approach)
 - 0.3
   - Cache language(s) on first call to `user-language[s]`  
     This should provide a substantial speed up for modules like `Intl::*` that call this frequently as a fall back.
