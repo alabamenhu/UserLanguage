@@ -1,5 +1,5 @@
 use Test;
-use Intl::UserLanguage:ver<0.11>;
+use Intl::UserLanguage:ver<0.4.0+>;
 
 ok defined user-language;
 
