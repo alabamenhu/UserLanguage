@@ -1,0 +1,39 @@
+# From native code version
+ast-US-u-ca-gregory-co-trad-fw-sun,en-US-u-ca-gregory-co-trad-fw-sun,es-ES-u-ca-gregory-co-trad-fw-sun,pt-PT-u-ca-gregory-co-trad-fw-sun,el-US-u-ca-gregory-co-trad-fw-sun,es-US-u-ca-gregory-co-trad-fw-sun,zh-Hant-HK-u-ca-gregory-co-trad-fw-sun,zh-Hans-US-u-ca-gregory-co-trad-fw-sun
+
+# defaults read -g AppleLanguages
+(
+    "ast-US",
+    "en-US",
+    "es-ES",
+    "pt-PT",
+    "el-US",
+    "es-US",
+    "zh-Hant-HK",
+    "zh-Hans-US"
+)
+
+# defaults read -g AppleCollationOrder (with a Spanish traditional sort)
+es@collation=traditional
+# defaults read -g AppleCollationOrder (with a Spanish modern sort)
+es@collation=traditional
+# defaults read -g AppleCollationOrder (with universal sort when in Spanish)
+root
+# defaults read -g AppleCollationOrder (with universal sort when in English)
+2022-10-18 21:28:27.893 defaults[78442:17902308]
+The domain/default pair of (kCFPreferencesAnyApplication, AppleCollationOrder) does not exist
+
+# defaults read -g AppleLocale (with a Gregorian calendar)
+en-Latn_US
+
+# defaults read -g AppleLocale (with a Buddhist calendar)
+en-Latn_US@calendar=buddhist
+
+# defaults read -g AppleFirstWeekday (when Sunday)
+2022-10-18 21:24:49.550 defaults[77722:17893261]
+The domain/default pair of (kCFPreferencesAnyApplication, AppleFirstWeekday) does not exist
+
+# defaults read -g AppleFirstWeekday (when Monday)
+{
+    gregorian = 2;
+}
