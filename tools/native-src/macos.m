@@ -28,7 +28,7 @@ const char* mac_native() {
     NSString  *collator = [[locale collatorIdentifier] rangeOfString:@"@collation"].location == NSNotFound
         ? nil
         : [[locale collatorIdentifier] substringFromIndex: NSMaxRange([[locale collatorIdentifier] rangeOfString:@"@collation"]) + 1];
-    //  I'm not sure what collation is and how it's supposed to be materially distinct from collator.
+    // I'm not sure what collation is and how it's supposed to be materially distinct from collator.
     // We ignore it for now, but should check with new Foundation releases to see if anything here is of use.
     // NSString *collation  = [locale  collationIdentifier];
 
