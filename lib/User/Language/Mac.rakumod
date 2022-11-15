@@ -1,10 +1,10 @@
 =begin pod
 The Mac stores language information in several locations in the global
 preferences domain.  Thus, we read them all using the shell command
-'defaults read -g X' where X is the property that we want.  Parsing is
+C<defaults read -g X> where X is the property that we want.  Parsing is
 regrettably not consistent, but will be documented at each stage.
 
-Per one of Apple's support posts (which I regrettably did not save a
+Per one of Apple’s support posts (which I regrettably did not save a
 link to), use of these defaults calls is I<not> considered a public
 API, and is subject to change.  Nonetheless, they appear to be
 generally stable and should work going back to at least 2012 (OS X
@@ -16,7 +16,7 @@ The stable API requires a call to Apple's Foundation frameworks.
 This is done via NativeCall.  Because of the way that GateKeeper works,
 I'm not entirely convinced that this is something that can be
 guaranteed to function long term without requiring users to build
-on their system (which requires clang or gcc to be installed).
+on their system (which requires C<clang> or C<gcc> to be installed).
 For this reason, I have also maintained similar code in Raku using
 the aforementioned non-public/non-stable (but very in the open,
 very unchanged) API provided through defaults.
@@ -65,6 +65,7 @@ sub mac_non-native {
     #   defaults read NSGlobalDomain
     #   ^^ the names vary; must check exact names by testing customized values
     #      as only those that differ from the defaults are used
+    say "called mac non-native";
 
     my $calendar  = get-calendar;
     my $collation = get-collation;
