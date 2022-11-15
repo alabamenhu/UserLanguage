@@ -1,21 +1,27 @@
 {
-  "name": "Intl::UserLanguage",
+  "name": "User::Language",
   "description": "A simple module for obtaining the user’s preferred language(s)",
-  "version": "0.3.1",
+  "version": "0.5.0",
   "perl": "6.*",
   "authors": [
     "Matthew ‘Matéu’ Stephen STUCKWISCH <mateu@softastur.com>"
   ],
-  "auth": "github:alabamenhu",
+  "auth": "zef:guifa",
   "depends": [
-    "Intl::LanguageTag"
+    "Intl::LanguageTag:auth:<zef:guifa>:ver<0.12.1+>"
   ],
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "Intl::UserLanguage": "lib/Intl/UserLanguage.pm6"
+    "Intl::UserLanguage": "lib/Intl/UserLanguage.rakumod",
+    "User::Language": "lib/User/Language.rakumod",
+    "User::Language::Linux": "lib/User/Language/Linux.rakumod",
+    "User::Language::Mac": "lib/User/Language/Mac.rakumod",
+    "User::Language::Windows": "lib/User/Language/Windows.rakumod"
   },
-  "resources": [],
+  "resources": [
+    "macos/userlanguage.dylib"
+  ],
   "license": "Artistic-2.0",
   "tags": [
     "Language",

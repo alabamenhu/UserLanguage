@@ -4,5 +4,24 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/lib" isTestSource="false" />
     </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Intl::LanguageTag:ver&lt;0.11&gt;" type="perl6">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1825291242:Intl::LanguageTag:ver&lt;0.11&gt;!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Intl::LanguageTaggish" type="perl6">
+        <CLASSES />
+        <JAVADOC />
+        <SOURCES>
+          <root url="raku://1825291242:Intl::LanguageTaggish!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>
