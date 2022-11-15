@@ -1,7 +1,7 @@
 {
-  "name": "Intl::UserLanguage",
+  "name": "User::Language",
   "description": "A simple module for obtaining the user’s preferred language(s)",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "perl": "6.*",
   "authors": [
     "Matthew ‘Matéu’ Stephen STUCKWISCH <mateu@softastur.com>"
@@ -13,10 +13,11 @@
   "build-depends": [],
   "test-depends": [],
   "provides": {
-    "Intl::UserLanguage": "lib/Intl/UserLanguage.pm6",
-    "Intl::UserLanguage::Linux": "lib/Intl/UserLanguage/Linux.pm6",
-    "Intl::UserLanguage::Mac": "lib/Intl/UserLanguage/Mac.pm6",
-    "Intl::UserLanguage::Windows": "lib/Intl/UserLanguage/Windows.pm6"
+    "Intl::UserLanguage": "lib/Intl/UserLanguage.rakumod",
+    "User::Language": "lib/User/Language.rakumod",
+    "User::Language::Linux": "lib/User/Language/Linux.rakumod",
+    "User::Language::Mac": "lib/User/Language/Mac.rakumod",
+    "User::Language::Windows": "lib/User/Language/Windows.rakumod"
   },
   "resources": [
     "macos/userlanguage.dylib"

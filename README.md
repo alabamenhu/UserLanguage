@@ -1,4 +1,8 @@
-![Intl::UserLanguage for Raku](docs/logo.png)
+# User::Language
+
+> **⚠︎ Name change ⚠**  
+> This module changed name from `Intl::UserLanguage` to `User::Language`.
+It will continue to provide under both names until the end of 2024.
 
 This is a incredibly simple module for Raku designed to do one thing and one thing
 only: obtain the current user’s preferred language(s).  There is no universal way
@@ -16,12 +20,11 @@ user-languages; # ↪︎ [ast-US], [es-US], [en-US], [pt-PT] (on my system)
 ```
 
 In truth, the preferred language is just a wrapper for calling `.head` on the
-list.  I'd recommend against using `user-language`, as most times when you
-need the languages (HTTP request headers, localization frameworks) there needs
-to be a negotiation to find a best match.
+list.  I'd recommend using the plural version anytime there may need to be a 
+negotiation to find a best (HTTP request headers, localization frameworks).
 
 In any case, both functions allow you to supply a default code which may be a
-string in BCP47 format or a LanguageTag.  This is useful in case for some reason
+string in BCP-47 format or a `LanguageTag`.  This is useful in case for some reason
 the user’s language(s) cannot be determined, for example, if the user is
 running an operating system that has not had its settings cataloged in this
 module.  If you do not provide a default, and no language can be found, the
@@ -57,12 +60,15 @@ and how to detect your system language(s) and I'll gladly add it.
 
 # Lightweight mode (under development)
 
-If your program only needs the language code to pass it through to something that only employs strings (e.g. to directly create a , it may
-be useful to `use` the module in `:light` mode.
+If your program only needs the language code to pass it through to something that only employs strings (e.g. to directly create an HTTP request), it may
+be useful to `use` the module in a `:light` mode.
 Instead of receiving a `LanguageTag` object, you will get a `Str` that can be passed into other modules.
 
 # Version History
 
+- 0.5.0 
+  - Renamed module to `User::Language` to be in line with modules like `User::Timezone`
+  - Fixed a bug in the fallbacks as specified by use statements
 - 0.4.0 
   - Moved individual OS versions into separate submodules.  This will be more maintainable long term
   - Adjusted OS detection for macOS (Rakudo no longer reports it as `macosx` but rather `macos`)
@@ -74,6 +80,7 @@ Instead of receiving a `LanguageTag` object, you will get a `Str` that can be pa
 
 # Licenses and Legal Stuff
 
-This module is licensed under the Artistic License 2.0 which is included
+This module is Copyright 2020-2022 by Matthew Stephen Stuckwisch and 
+licensed under the Artistic License 2.0 which is included
 with the source.  Camelia (the butterfly) is a trademark belonging to
 Larry Walls and used in accordance with his terms.
