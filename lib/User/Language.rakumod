@@ -45,7 +45,6 @@ sub EXPORT (
     #| Obtains the user’s preferred language(s) in LanguageTag format.
     sub user-languages(+@default) {
         return @languages if @languages;
-        say "detecting";
         @languages =
             do given $*DISTRO  {
                 when .is-win   {  windows     }
