@@ -65,7 +65,6 @@ sub mac_non-native {
     #   defaults read NSGlobalDomain
     #   ^^ the names vary; must check exact names by testing customized values
     #      as only those that differ from the defaults are used
-    say "called mac non-native";
 
     my $calendar  = get-calendar;
     my $collation = get-collation;
