@@ -66,6 +66,8 @@ Instead of receiving a `LanguageTag` object, you will get a `Str` that can be pa
 
 # Version History
 
+- 0.5.1
+  - Removed debug code
 - 0.5.0 
   - Renamed module to `User::Language` to be in line with modules like `User::Timezone`
   - Fixed a bug in the fallbacks as specified by use statements
