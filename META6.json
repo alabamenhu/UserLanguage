@@ -1,7 +1,7 @@
 {
   "name": "User::Language",
   "description": "A simple module for obtaining the user’s preferred language(s)",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "perl": "6.*",
   "authors": [
     "Matthew ‘Matéu’ Stephen STUCKWISCH <mateu@softastur.com>"
