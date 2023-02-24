@@ -24,7 +24,7 @@ my package UserLanguage {
 sub EXPORT (
         +@fallback-languages #= The language tag(s) to use as the fallback if language detection fails
 ) {
-    use Intl::LanguageTag:auth<zef:guifa>:ver<0.12+>;
+    use Intl::LanguageTag:auth<zef:guifa>:ver<0.12.2+>;
     use User::Language::Linux;
     use User::Language::Mac;
     use User::Language::Windows;
@@ -69,7 +69,7 @@ sub EXPORT (
 my package EXPORT::override {
     &OUR::override-user-languages =
         sub override-user-languages(+@languages is copy) {
-            use Intl::LanguageTag;
+            use Intl::LanguageTag:auth<zef:guifa>:ver<0.12.2+>;
             @UserLanguage::languages-backup = @UserLanguage::languages;
             @UserLanguage::languages        = @languages
         };
